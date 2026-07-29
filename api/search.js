@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const rakutenRes = await fetch(
-      `https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?applicationId=${APP_ID}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`
+      `https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?applicationId=${APP_ID}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`
     );
     const rakutenData = await rakutenRes.json();
 
