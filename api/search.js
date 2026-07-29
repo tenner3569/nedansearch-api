@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         shopName: i.shopName,
         title:    i.itemName,
         price:    i.itemPrice,
-        url:      i.affiliateUrl || i.itemUrl,
+        url: i.affiliateUrl || i.itemUrl || '',
         image:    i.mediumImageUrls?.[0] || ''
       }));
 
