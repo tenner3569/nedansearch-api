@@ -11,7 +11,12 @@ export default async function handler(req, res) {
 
   try {
     const rakutenRes = await fetch(
-      `https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?applicationId=${APP_ID}&accessKey=${ACCESS_KEY}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`
+      `https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?applicationId=${APP_ID}&accessKey=${ACCESS_KEY}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`,
+      {
+        headers: {
+          'Referer': 'https://tenner3569.github.io'
+        }
+      }
     );
     const rakutenData = await rakutenRes.json();
 
