@@ -25,14 +25,16 @@ export default async function handler(req, res) {
       return res.status(200).json({ items: [] });
     }
 
-    const items = rakutenData.Items.map(i => ({
-      platform: 'rakuten',
-      shopName: i.shopName,
-      title:    i.itemName,
-      price:    i.itemPrice,
-      url:      i.affiliateUrl || i.itemUrl,
-      image:    i.mediumImageUrls?.[0] || ''
-    }));
+    const items = rakutenData.Items
+      .filter(i => i.availability === 1)
+      .map(i => ({
+        platform: 'rakuten',
+        shopName: i.shopName,
+        title:    i.itemName,
+        price:    i.itemPrice,
+        url:      i.affiliateUrl || i.itemUrl,
+        image:    i.mediumImageUrls?.[0] || ''
+      }));
 
     res.status(200).json({ items });
   } catch (e) {
