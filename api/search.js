@@ -14,6 +14,10 @@ export default async function handler(req, res) {
     );
     const rakutenData = await rakutenRes.json();
 
+    if (!rakutenData.Items || rakutenData.Items.length === 0) {
+      return res.status(200).json({ items: [] });
+    }
+
     const items = rakutenData.Items.map(({ Item: i }) => ({
       platform: 'rakuten',
       shopName: i.shopName,
