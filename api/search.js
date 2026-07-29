@@ -10,21 +10,25 @@ export default async function handler(req, res) {
 
   try {
     const rakutenRes = await fetch(
-      `https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?applicationId=${APP_ID}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice`
+      `https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?applicationId=${APP_ID}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`
     );
     const rakutenData = await rakutenRes.json();
+
+    if (rakutenData.error) {
+      return res.status(200).json({ error: rakutenData.error_description, items: [] });
+    }
 
     if (!rakutenData.Items || rakutenData.Items.length === 0) {
       return res.status(200).json({ items: [] });
     }
 
-    const items = rakutenData.Items.map(({ Item: i }) => ({
+    const items = rakutenData.Items.map(i => ({
       platform: 'rakuten',
       shopName: i.shopName,
       title:    i.itemName,
       price:    i.itemPrice,
       url:      i.affiliateUrl || i.itemUrl,
-      image:    i.mediumImageUrls?.[0]?.imageUrl || ''
+      image:    i.mediumImageUrls?.[0] || ''
     }));
 
     res.status(200).json({ items });
