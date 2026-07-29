@@ -14,13 +14,12 @@ export default async function handler(req, res) {
       `https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701?applicationId=${APP_ID}&accessKey=${ACCESS_KEY}&affiliateId=${AFFILIATE}&keyword=${encodeURIComponent(keyword)}&hits=30&sort=%2BitemPrice&formatVersion=2`,
       {
         headers: {
-          'Referer': 'https://tenner3569.github.io'
+          'Referer': 'https://tenner3569.github.io/nedansearch',
+          'Origin': 'https://tenner3569.github.io'
         }
       }
     );
     const rakutenData = await rakutenRes.json();
-
-    // デバッグ用
     res.status(200).json({ debug: rakutenData });
   } catch (e) {
     res.status(500).json({ error: e.message });
