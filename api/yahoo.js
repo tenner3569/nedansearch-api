@@ -15,14 +15,16 @@ export default async function handler(req, res) {
     );
     const yahooData = await yahooRes.json();
 
-    const items = yahooData.hits.map(i => ({
-      platform: 'yahoo',
-      shopName: i.seller?.name || 'Yahoo!ショッピング',
-      title:    i.name,
-      price:    i.price,
-      url:      i.affiliateUrl || i.url,
-      image:    i.image?.medium || ''
-    }));
+    const items = yahooData.hits
+  .filter(i => i.inStock === true)
+  .map(i => ({
+    platform: 'yahoo',
+    shopName: i.seller?.name || 'Yahoo!ショッピング',
+    title:    i.name,
+    price:    i.price,
+    url:      i.affiliateUrl || i.url,
+    image:    i.image?.medium || ''
+  }));
 
     res.status(200).json({ items });
   } catch (e) {
