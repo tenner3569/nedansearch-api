@@ -20,7 +20,21 @@ export default async function handler(req, res) {
       }
     );
     const rakutenData = await rakutenRes.json();
-    res.status(200).json({ debug: rakutenData });
+
+    if (!rakutenData.Items || rakutenData.Items.length === 0) {
+      return res.status(200).json({ items: [] });
+    }
+
+    const items = rakutenData.Items.map(i => ({
+      platform: 'rakuten',
+      shopName: i.shopName,
+      title:    i.itemName,
+      price:    i.itemPrice,
+      url:      i.affiliateUrl || i.itemUrl,
+      image:    i.mediumImageUrls?.[0] || ''
+    }));
+
+    res.status(200).json({ items });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
