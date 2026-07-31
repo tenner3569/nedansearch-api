@@ -11,11 +11,26 @@ export default async function handler(req, res) {
 
   try {
     const yahooRes = await fetch(
-      `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${APP_ID}&affiliate_type=vc&sid=${SID}&pid=${PID}&query=${encodeURIComponent(keyword)}&results=3&sort=%2Bprice`
+      `https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=${APP_ID}&affiliate_type=vc&sid=${SID}&pid=${PID}&query=${encodeURIComponent(keyword)}&results=30&sort=%2Bprice`
     );
     const yahooData = await yahooRes.json();
 
-    res.status(200).json({ debug: yahooData.hits?.[0] });
+    const items = yahooData.hits
+      .filter(i => i.inStock === true)
+      .map(i => {
+        const originalUrl = i.url;
+        const affiliateUrl = `https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=${SID}&pid=${PID}&vc_url=${encodeURIComponent(originalUrl)}`;
+        return {
+          platform: 'yahoo',
+          shopName: i.seller?.name || 'Yahoo!ショッピング',
+          title:    i.name,
+          price:    i.price,
+          url:      affiliateUrl,
+          image:    i.image?.medium || ''
+        };
+      });
+
+    res.status(200).json({ items });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
