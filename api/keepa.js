@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   try {
     const keepaRes = await fetch(
-      ``https://api.keepa.com/product?key=${API_KEY}&domain=5&asin=${asin}&code=${asin}``
+      `https://api.keepa.com/product?key=${API_KEY}&domain=5&asin=${asin}&stats=0&offers=0`
     );
     const keepaData = await keepaRes.json();
 
