@@ -13,14 +13,8 @@ export default async function handler(req, res) {
     );
     const keepaData = await keepaRes.json();
 
-    if (!keepaData.products || keepaData.products.length === 0) {
-      return res.status(200).json({ jan: null });
-    }
-
-    const product = keepaData.products[0];
-    const jan = product.eanList?.[0] || null;
-
-    res.status(200).json({ jan, title: product.title });
+    // デバッグ用：生データをそのまま返す
+    res.status(200).json({ debug: keepaData });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
