@@ -9,12 +9,18 @@ export default async function handler(req, res) {
 
   try {
     const keepaRes = await fetch(
-      `https://api.keepa.com/product?key=${API_KEY}&domain=5&asin=${asin}&stats=0&offers=0`
+      `https://api.keepa.com/product?key=${API_KEY}&domain=5&asin=${asin}`
     );
     const keepaData = await keepaRes.json();
 
-    // デバッグ用：生データをそのまま返す
-    res.status(200).json({ debug: keepaData });
+    if (!keepaData.products || keepaData.products.length === 0) {
+      return res.status(200).json({ jan: null });
+    }
+
+    const product = keepaData.products[0];
+    const jan = product.eanList?.[0] || null;
+
+    res.status(200).json({ jan, title: product.title });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
